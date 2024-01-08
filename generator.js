@@ -13,8 +13,8 @@
 
 	if(utms.length > 0){
 		var utm_decoded = JSON.parse(decodeURIComponent(utms));
-		 Object.entries(utm_decoded).forEach(function(k,v){
-		    parameters.push(k'='+v);  
+		 Object.entries(utm_decoded).forEach(function(k){
+		 	parameters.push(k[0]+'='+k[1]);  
 		});
 		
 	}
@@ -24,6 +24,8 @@
 		parameters.push('clientid='+clientId);
 	}
 
+	parameters.push('timestamp='+new Date().getTime())
+
 	if(parameters.length > 0){
 		parameters = '?'+parameters.join('&');
 	}
@@ -31,6 +33,6 @@
 	var size = (e.getAttribute('size') == null)?"100x100":e.getAttribute('size');
 
 	var deeplink = "https://links.guideinvestimentos.com.br/onboarding";
-	var urlapi = "https://api.qrserver.com/v1/create-qr-code/?size="+size+"&data="+deeplink+parameters;
+	var urlapi = "https://api.qrserver.com/v1/create-qr-code/?size="+size+"&data="+encodeURIComponent(deeplink+parameters);
 	e.setAttribute('src', urlapi);
 })();
