@@ -7,19 +7,30 @@
 	}
 
 	var utms = getCookieValue('origemMTZ');
-	var parameters = '';
+	var ga = getCookieValue('_ga');
+
+	var parameters = [];
 
 	if(utms.length > 0){
 		var utm_decoded = JSON.parse(decodeURIComponent(utms));
-		parameters = '?utm_source='+utm_decoded.utm_source;
+		 Object.entries(utm_decoded).forEach(function(k,v){
+		    parameters.push(k'='+v);  
+		});
+		
 	}
 
-	var size = e.getAttribute('size');
-	if(size == null){
-		size = "100x100";
+	if(ga.length > 0){
+		var clientId = ga.substr(6);
+		parameters.push('clientid='+clientId);
 	}
 
-	var deeplink = "https://deeplink.guideinvestimentos.com.br/onboarding";
+	if(parameters.length > 0){
+		parameters = '?'+parameters.join('&');
+	}
+
+	var size = (e.getAttribute('size') == null)?"100x100":e.getAttribute('size');
+
+	var deeplink = "https://links.guideinvestimentos.com.br/onboarding";
 	var urlapi = "https://api.qrserver.com/v1/create-qr-code/?size="+size+"&data="+deeplink+parameters;
 	e.setAttribute('src', urlapi);
 })();
